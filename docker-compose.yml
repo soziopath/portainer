@@ -12,8 +12,12 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy_network" # Directs Traefik to hit the container on this interface
       - "traefik.http.routers.portainer.rule=Host(`portainer.home.local`)"
-      - "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9443" # Internal container port
+      - "traefik.http.routers.portainer.entrypoints=web,websecure"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000" # Internal container port
+    networks:
+      - default
+      - proxy_network
 networks:
   default:
     name: portainer_network
