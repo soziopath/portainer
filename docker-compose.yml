@@ -8,6 +8,14 @@ services:
       - ./data:/data
     ports:
       - 9443:9443
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy_network" # Directs Traefik to hit the container on this interface
+      - "traefik.http.routers.portainer.rule=Host(`portainer.home.local`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9443" # Internal container port
 networks:
   default:
     name: portainer_network
+  proxy_network:
+    external: true
